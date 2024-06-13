@@ -1,0 +1,27 @@
+all:
+  hosts:
+    k8s-141:
+      ansible_host: k8s-141.gedoplan.intra
+    k8s-142:
+      ansible_host: k8s-142.gedoplan.intra
+    k8s-143:
+      ansible_host: k8s-143.gedoplan.intra
+  children:
+    kube_control_plane:
+      hosts:
+        k8s-141:
+    kube_node:
+      hosts:
+        k8s-142:
+        k8s-143:
+    etcd:
+      hosts:
+        k8s-141:
+        k8s-142:
+        k8s-143:
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+    calico_rr:
+      hosts: {}

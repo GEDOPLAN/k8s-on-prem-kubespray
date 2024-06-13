@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: cert-manager
+
+resources:
+  - demo-internal.yaml
+
+secretGenerator:
+  - name: demo-internal-ca
+    namespace: cert-manager
+    behavior: create
+    options:
+      disableNameSuffixHash: true
+    files:
+      - "tls.crt"
+      - "tls.key"
+

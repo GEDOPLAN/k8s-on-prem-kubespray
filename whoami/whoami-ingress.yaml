@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: demo-internal
+spec:
+  rules:
+  - host: whoami.demo.gedoplan.de
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: whoami
+            port: 
+              number: 80
+  - host: whoami.demo.gedoplan.demo
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: whoami
+            port: 
+              number: 80
+  tls:
+    - hosts:
+        - whoami.demo.gedoplan.demo
+      secretName: whoami-demo-gedoplan-demo-tls

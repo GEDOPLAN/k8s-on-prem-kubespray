@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg
+spec:
+  serviceName: pg
+  selector:
+    matchLabels:
+      name: pg
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+  template:
+    metadata:
+      labels:
+        name: pg
+    spec:
+      # For demo purposes: Force db pod on named node
+      # nodeName: k8s-142
+      containers:
+        - image: postgres:16.0-alpine
+          name: db
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: demo
+            - name: POSTGRES_USER
+              value: demo
+            - name: POSTGRES_PASSWORD
+              value: demo_123
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: pg-data
+              subPath: data
